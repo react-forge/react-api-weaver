@@ -12,6 +12,10 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/ajay28kumar/react-api-forge.git"
+  },
   "bin": {
     "react-api-weaver": "./dist/cli.js"
   },

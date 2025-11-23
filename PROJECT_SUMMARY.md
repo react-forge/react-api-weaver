@@ -9,9 +9,6 @@ All planned features have been successfully implemented according to the specifi
 ## 📦 Package Structure
 
 ### Main Library (`react-api-weaver`)
-
-**Location:** `/Users/ajaykumar/workspace/personal-tech/react-fetch-library/`
-
 #### Core Components
 
 1. **React Hooks** (`src/hooks/`)
@@ -57,11 +54,6 @@ All planned features have been successfully implemented according to the specifi
 - ✅ `.cursorrules` - Project rules for Cursor IDE
 
 ---
-
-## 🎯 Example Application
-
-**Location:** `/Users/ajaykumar/workspace/personal-tech/react-fetch-library/example/`
-
 ### Structure
 
 1. **OpenAPI Specification** (`service-storybook/`)

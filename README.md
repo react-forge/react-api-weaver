@@ -449,33 +449,6 @@ npm link
 npm link react-api-weaver
 ```
 
-## 📦 Publishing
-
-The library is configured for npm publishing:
-
-```json
-{
-  "files": ["dist", "README.md"],
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  }
-}
-```
-
-To publish:
-
-```bash
-npm run build
-npm publish
-```
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
