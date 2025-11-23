@@ -1,4 +1,4 @@
-import { CacheConfig } from '../types';
+// import { CacheConfig } from '../types';
 
 interface CacheEntry<T> {
   data: T;
