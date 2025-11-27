@@ -61,7 +61,10 @@ paths:
 npx react-api-weaver generate -i api.yaml -o src/generated
 ```
 
-This generates TypeScript functions and types in `src/generated/api.ts`.
+This generates TypeScript functions and types:
+- `src/generated/api.ts` - API functions
+- `src/generated/types.ts` - TypeScript types/interfaces for requests and responses
+- `src/generated/index.ts` - Exports for easy importing
 
 ### 3. Use the generated hooks in your React components
 
@@ -393,12 +396,48 @@ You can set a base URL in three ways:
 your-project/
 ├── src/
 │   ├── generated/          # Generated API code
-│   │   ├── api.ts          # Generated functions and types
-│   │   └── index.ts        # Exports
+│   │   ├── api.ts          # Generated API functions
+│   │   ├── types.ts        # TypeScript types/interfaces
+│   │   └── index.ts        # Exports (functions + types)
 │   └── components/
 │       └── UserList.tsx    # Your components using hooks
 ├── api.yaml                # OpenAPI specification
 └── package.json
+```
+
+## 📘 Type Exports
+
+All TypeScript types are exported from the generated `types.ts` file. You can import types separately from functions:
+
+```tsx
+// Import functions
+import { getUsers, createUser } from './generated/api';
+
+// Import types separately
+import type { GetUsersResponse, CreateUserBody, CreateUserResponse } from './generated/types';
+
+// Or import everything from index
+import { getUsers, type GetUsersResponse } from './generated';
+```
+
+**Available Types:**
+- `{OperationName}Params` - Request parameters (for GET, DELETE, etc.)
+- `{OperationName}Body` - Request body (for POST, PUT, PATCH)
+- `{OperationName}Response` - Response data type
+
+**Example:**
+```tsx
+import { getTodoById } from './generated/api';
+import type { GetTodoByIdParams, GetTodoByIdResponse } from './generated/types';
+
+function TodoComponent({ todoId }: { todoId: number }) {
+  const params: GetTodoByIdParams = { id: todoId };
+  const { data } = useGet<GetTodoByIdResponse>(
+    () => getTodoById(params)
+  );
+  
+  return <div>{data?.title}</div>;
+}
 ```
 
 ## 🛠️ Development Workflow

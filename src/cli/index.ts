@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { watch } from 'chokidar';
 import { parseOpenAPI } from '../generator/parser';
-import { generateTypeScriptCode, generateJavaScriptCode } from '../generator/codegen';
+import { generateTypeScriptCode, generateJavaScriptCode, generateTypeScriptTypes } from '../generator/codegen';
 
 const program = new Command();
 
@@ -88,6 +88,14 @@ async function generateCode(options: {
     // Generate TypeScript code
     if (format === 'ts' || format === 'both') {
       console.log('🔨 Generating TypeScript code...');
+      
+      // Generate types file
+      const typesCode = generateTypeScriptTypes(parsedAPI);
+      const typesOutputPath = path.join(output, 'types.ts');
+      fs.writeFileSync(typesOutputPath, typesCode);
+      console.log(`✅ Generated types: ${typesOutputPath}`);
+      
+      // Generate API functions file
       const tsCode = generateTypeScriptCode(parsedAPI, baseUrl);
       const tsOutputPath = path.join(output, 'api.ts');
       fs.writeFileSync(tsOutputPath, tsCode);
@@ -115,7 +123,7 @@ async function generateCode(options: {
 
 function generateIndexFile(output: string, format: string) {
   if (format === 'ts' || format === 'both') {
-    const indexContent = `export * from './api';\n`;
+    const indexContent = `export * from './api';\nexport * from './types';\n`;
     fs.writeFileSync(path.join(output, 'index.ts'), indexContent);
   }
 
