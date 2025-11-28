@@ -1,7 +1,7 @@
 {
   "name": "react-api-weaver",
-  "version": "1.1.1",
-  "description": "Convert OpenAPI YAML specs into typed React hooks with caching, polling, and cancellation support",
+  "version": "2.0.0",
+  "description": "Convert OpenAPI YAML specs into typed React hooks with caching, polling, and cancellation support. Now with React 19 support!",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -27,6 +27,8 @@
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "prepublishOnly": "npm run build",
     "link:example": "npm link && cd example && npm link react-api-weaver"
   },
@@ -44,7 +46,7 @@
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "react": "^17.0.0 || ^18.0.0"
+    "react": "^17.0.0 || ^18.0.0 || ^19.0.0"
   },
   "dependencies": {
     "commander": "^11.1.0",
@@ -55,11 +57,17 @@
     "chokidar": "^3.5.3"
   },
   "devDependencies": {
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/react-hooks": "^8.0.1",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.10.5",
-    "@types/react": "^18.2.45",
-    "react": "^18.2.0",
+    "@types/react": "^19.0.0",
+    "@vitest/ui": "^1.0.4",
+    "jsdom": "^23.0.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "tsdown": "^0.9.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.4"
   }
 }
