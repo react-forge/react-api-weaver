@@ -501,13 +501,7 @@ MIT
 - Built with [TypeScript](https://www.typescriptlang.org/)
 - Powered by [React](https://reactjs.org/)
 - OpenAPI parsing by [Swagger Parser](https://github.com/APIDevTools/swagger-parser)
-- Bundled with [tsup](https://github.com/egoist/tsup)
-
-## 📚 Related Projects
-
-- [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator)
-- [React Query](https://tanstack.com/query/latest)
-- [SWR](https://swr.vercel.app/)
+- Bundled with [tsdown](https://tsdown.dev)
 
 ## ☕ Support
 

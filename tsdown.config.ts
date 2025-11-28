@@ -1,4 +1,4 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from 'tsdown';
 
 export default defineConfig([
   // Main library bundle
@@ -14,18 +14,24 @@ export default defineConfig([
   // CLI bundle
   {
     entry: {
-      'cli': 'src/cli/index.ts',
+      cli: 'src/cli/index.ts',
     },
     format: ['cjs'],
     outDir: 'dist',
-    outExtension: () => ({ js: '.js' }),
     dts: false,
     clean: false,
     sourcemap: false,
-    banner: {
-      js: '#!/usr/bin/env node',
+    outputOptions: {
+      banner: '#!/usr/bin/env node',
     },
-    external: ['commander', 'js-yaml', '@apidevtools/swagger-parser', 'chokidar', 'openapi-typescript', 'openapi-types'],
+    external: [
+      'commander',
+      'js-yaml',
+      '@apidevtools/swagger-parser',
+      'chokidar',
+      'openapi-typescript',
+      'openapi-types',
+    ],
   },
 ]);
 
