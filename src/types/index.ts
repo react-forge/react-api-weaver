@@ -58,3 +58,51 @@ export interface GeneratorConfig {
   baseURL?: string; // Base URL for API requests
 }
 
+/**
+ * Function to compute optimistic state update
+ */
+export type OptimisticUpdateFn<TData, TInput = any> = (
+  currentData: TData | null,
+  input: TInput
+) => TData;
+
+/**
+ * Options for useApiOptimistic hook (React 19+)
+ */
+export interface UseApiOptimisticOptions<TData = any, TInput = any> extends Omit<UseApiOptions<TData>, 'enabled'> {
+  optimisticUpdate?: OptimisticUpdateFn<TData, TInput>;
+  rollbackOnError?: boolean; // Default: true
+}
+
+/**
+ * Return type for useApiOptimistic hook (React 19+)
+ */
+export interface UseApiOptimisticResult<TData = any, TInput = any> {
+  data: TData | null;
+  optimisticData: TData | null; // The optimistic state
+  loading: boolean;
+  error: Error | null;
+  mutate: (input: TInput) => Promise<void>;
+  abort: () => void;
+}
+
+/**
+ * Options for useApiAction hook (React 19+)
+ */
+export interface UseApiActionOptions<TData = any> {
+  onSuccess?: (data: TData) => void;
+  onError?: (error: Error) => void;
+  initialData?: TData | null;
+}
+
+/**
+ * Return type for useApiAction hook (React 19+)
+ */
+export interface UseApiActionResult<TData = any, TInput = any> {
+  data: TData | null;
+  error: Error | null;
+  isPending: boolean;
+  action: (input: TInput) => Promise<void>;
+  formAction: (formData: FormData) => Promise<void>;
+}
+

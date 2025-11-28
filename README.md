@@ -13,6 +13,10 @@ Convert OpenAPI/Swagger YAML specifications into typed React hooks with caching,
 - **🚀 Zero Configuration**: Works out of the box
 - **🎯 Type-Safe**: End-to-end type safety from API to UI
 - **⚡ Lightweight**: Minimal dependencies, tree-shakeable
+- **✨ React 19 Ready**: Full support for React 17, 18, and 19 with new hooks
+  - **Optimistic Updates** with `useOptimistic` (React 19+)
+  - **Form Actions** with `useActionState` (React 19+)
+  - **Backward Compatible**: Graceful fallback for React 17/18
 
 ## 📦 Installation
 
@@ -135,7 +139,9 @@ react-api-weaver watch -i api.yaml -o src/generated
 
 ## 🎣 Hooks API
 
-### useGet
+### Standard Hooks
+
+#### useGet
 
 Hook for GET requests with caching support.
 
@@ -146,7 +152,7 @@ const { data, loading, error, refetch, abort } = useGet(
 );
 ```
 
-### usePost
+#### usePost
 
 Hook for POST requests (cache disabled by default).
 
@@ -157,7 +163,7 @@ const { data, loading, error, refetch, abort } = usePost(
 );
 ```
 
-### usePut
+#### usePut
 
 Hook for PUT requests (cache disabled by default).
 
@@ -168,7 +174,7 @@ const { data, loading, error, refetch, abort } = usePut(
 );
 ```
 
-### usePatch
+#### usePatch
 
 Hook for PATCH requests (cache disabled by default).
 
@@ -179,7 +185,7 @@ const { data, loading, error, refetch, abort } = usePatch(
 );
 ```
 
-### useDelete
+#### useDelete
 
 Hook for DELETE requests (cache disabled by default).
 
@@ -188,6 +194,53 @@ const { data, loading, error, refetch, abort } = useDelete(
   apiFunction,
   options
 );
+```
+
+### React 19+ Hooks (with React 17/18 Fallback)
+
+#### useApiOptimistic
+
+Hook for mutations with optimistic updates using React 19's `useOptimistic`.
+
+```tsx
+const { data, optimisticData, loading, error, mutate, abort } = useApiOptimistic(
+  apiFunction,
+  {
+    optimisticUpdate: (currentData, input) => {
+      // Return the optimistic state
+      return { ...currentData, ...input };
+    },
+    onSuccess: (data) => console.log('Success!', data),
+  }
+);
+```
+
+**Specialized Optimistic Hooks:**
+- `usePostOptimistic` - POST with optimistic updates
+- `usePutOptimistic` - PUT with optimistic updates
+- `usePatchOptimistic` - PATCH with optimistic updates
+- `useDeleteOptimistic` - DELETE with optimistic updates
+
+#### useApiAction
+
+Hook for form-based API interactions using React 19's `useActionState`.
+
+```tsx
+const { data, error, isPending, action, formAction } = useApiAction(
+  apiFunction,
+  {
+    onSuccess: (data) => console.log('Success!', data),
+  }
+);
+
+// Use with forms
+<form action={formAction}>
+  <input name="title" />
+  <button type="submit">Submit</button>
+</form>
+
+// Or call directly
+await action({ title: 'New Todo' });
 ```
 
 ## ⚙️ Hook Options
@@ -356,6 +409,82 @@ function UserProfile({ userId }) {
 }
 ```
 
+### Example 6: Optimistic Updates (React 19+)
+
+```tsx
+import { usePostOptimistic } from 'react-api-weaver';
+import { createTodo } from './generated/api';
+
+function OptimisticTodo() {
+  const [todos, setTodos] = useState([]);
+  
+  const { optimisticData, loading, mutate } = usePostOptimistic(
+    (input) => createTodo(input),
+    {
+      optimisticUpdate: (current, input) => ({
+        id: Date.now(), // Temporary ID
+        ...input,
+      }),
+      onSuccess: (data) => {
+        setTodos(prev => [...prev, data]);
+      },
+    }
+  );
+
+  const handleCreate = () => {
+    mutate({ title: 'New Todo', userId: 1, completed: false });
+  };
+
+  return (
+    <div>
+      <button onClick={handleCreate} disabled={loading}>
+        Add Todo
+      </button>
+      {optimisticData && (
+        <div style={{ opacity: loading ? 0.5 : 1 }}>
+          ⚡ {optimisticData.title} (optimistic)
+        </div>
+      )}
+      {todos.map(todo => (
+        <div key={todo.id}>{todo.title}</div>
+      ))}
+    </div>
+  );
+}
+```
+
+### Example 7: Form Actions (React 19+)
+
+```tsx
+import { useApiAction } from 'react-api-weaver';
+import { createTodo } from './generated/api';
+
+function TodoForm() {
+  const { data, error, isPending, formAction } = useApiAction(
+    (input) => createTodo({
+      userId: 1,
+      title: input.title,
+      completed: input.completed === 'true',
+    })
+  );
+
+  return (
+    <form action={formAction}>
+      <input name="title" placeholder="Todo title" required />
+      <select name="completed">
+        <option value="false">Not Done</option>
+        <option value="true">Done</option>
+      </select>
+      <button type="submit" disabled={isPending}>
+        {isPending ? 'Creating...' : 'Create Todo'}
+      </button>
+      {error && <div>Error: {error.message}</div>}
+      {data && <div>Created: {data.title}</div>}
+    </form>
+  );
+}
+```
+
 ## 🔧 Configuration
 
 ### Custom Request Configuration
@@ -511,18 +640,171 @@ If you find this project helpful, consider supporting me by buying me a coffee!
 
 ---
 
+## 🎉 React 19 Features
+
+React API Weaver now fully supports React 19 while maintaining backward compatibility with React 17 and 18.
+
+### What's New in React 19 Support
+
+#### 1. Optimistic Updates
+
+Use `useOptimistic` (React 19) for instant UI feedback before server responses:
+
+```tsx
+import { usePostOptimistic } from 'react-api-weaver';
+
+const { optimisticData, mutate } = usePostOptimistic(
+  createTodo,
+  {
+    optimisticUpdate: (current, input) => ({
+      id: Date.now(),
+      ...input,
+    }),
+  }
+);
+```
+
+**Benefits:**
+- ⚡ Instant UI updates
+- 🔄 Automatic rollback on errors
+- 🎯 Type-safe optimistic state
+
+#### 2. Form Actions
+
+Use `useActionState` (React 19) for progressive enhancement:
+
+```tsx
+import { useApiAction } from 'react-api-weaver';
+
+const { formAction, isPending } = useApiAction(createTodo);
+
+<form action={formAction}>
+  <input name="title" />
+  <button type="submit" disabled={isPending}>Submit</button>
+</form>
+```
+
+**Benefits:**
+- 📝 Works with native form elements
+- 🚀 Progressive enhancement
+- 🎯 Built-in pending states
+
+#### 3. Version Detection
+
+Check React version at runtime:
+
+```tsx
+import { isReact19OrLater, getReactMajorVersion } from 'react-api-weaver';
+
+if (isReact19OrLater()) {
+  console.log('React 19 features available!');
+}
+```
+
+### Backward Compatibility
+
+All React 19 features gracefully degrade on React 17/18:
+
+| Feature | React 19 | React 17/18 Fallback |
+|---------|----------|----------------------|
+| `useApiOptimistic` | Uses native `useOptimistic` | Manual state management |
+| `useApiAction` | Uses native `useActionState` | `useTransition` + state |
+| Optimistic hooks | Native rollback | Manual error handling |
+
+### Migration Guide
+
+#### From React 18 to React 19
+
+**Step 1: Update Dependencies**
+
+```bash
+npm install react@19 react-dom@19
+npm install react-api-weaver@latest
+```
+
+**Step 2: Use New Hooks (Optional)**
+
+Replace standard mutation hooks with optimistic variants:
+
+```tsx
+// Before (React 18)
+const { data, loading, refetch } = usePost(createTodo, {
+  enabled: false,
+  onSuccess: (data) => {
+    setItems(prev => [...prev, data]);
+  }
+});
+
+// After (React 19)
+const { optimisticData, loading, mutate } = usePostOptimistic(createTodo, {
+  optimisticUpdate: (current, input) => ({
+    id: Date.now(),
+    ...input,
+  }),
+  onSuccess: (data) => {
+    setItems(prev => [...prev, data]);
+  }
+});
+```
+
+**Step 3: Adopt Form Actions (Optional)**
+
+```tsx
+// Before (React 18)
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  await createTodo(Object.fromEntries(formData));
+};
+
+// After (React 19)
+const { formAction } = useApiAction(createTodo);
+
+<form action={formAction}>
+  {/* form fields */}
+</form>
+```
+
+### Best Practices
+
+#### When to Use Optimistic Updates
+
+✅ **Good use cases:**
+- Creating new items in a list
+- Toggling boolean states (like/unlike)
+- Updating text fields
+- Deleting items with visual feedback
+
+❌ **Avoid for:**
+- Complex server-side validation
+- Operations with side effects
+- Critical financial transactions
+- When server response differs significantly from input
+
+#### When to Use Form Actions
+
+✅ **Good use cases:**
+- Traditional form submissions
+- Server-side validation
+- Progressive enhancement
+- Multi-step forms
+
+❌ **Avoid for:**
+- Real-time validation
+- Complex client-side logic
+- Non-form interactions
+
 ## 📝 Next Steps (Optional Enhancements)
 
 ### Potential Future Features
+- [x] Optimistic updates (React 19)
+- [x] Form actions (React 19)
 - [ ] Automated testing (Jest + React Testing Library)
 - [ ] React Query integration
 - [ ] Middleware support (interceptors)
-- [ ] Retry logic configuration
-- [ ] Optimistic updates helper
 - [ ] WebSocket support
 - [ ] GraphQL support
 - [ ] Zod schema validation
-- [ ] SWR-style mutations
 - [ ] Devtools integration
 
 ### Documentation Improvements
@@ -530,7 +812,6 @@ If you find this project helpful, consider supporting me by buying me a coffee!
 - [ ] Interactive playground
 - [ ] More examples (auth, pagination, etc.)
 - [ ] API reference site
-- [ ] Migration guides
 
 
 Made with ❤️ by the React API Weaver team
