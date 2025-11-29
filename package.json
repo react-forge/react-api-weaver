@@ -30,6 +30,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:coverage:update": "vitest run --coverage && node scripts/update-readme-coverage.js",
     "coverage:check": "node scripts/check-coverage.js",
     "coverage:update-readme": "node scripts/update-readme-coverage.js",
     "prepublishOnly": "npm run build",
@@ -74,5 +75,9 @@
     "tsdown": "^0.9.1",
     "typescript": "^5.3.3",
     "vitest": "^1.0.4"
+  },
+  "packageManager": "yarn@>=1.22.0",
+  "engines": {
+    "yarn": ">=1.22.0"
   }
 }

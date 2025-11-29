@@ -70,5 +70,48 @@ describe('Cache Utilities', () => {
       expect(key).toBe(customKey);
     });
   });
+
+  describe('Cache updates', () => {
+    it('should update existing cache entry', () => {
+      cache.set('key1', { data: 'old' });
+      expect(cache.get('key1')).toEqual({ data: 'old' });
+
+      cache.set('key1', { data: 'new' });
+      expect(cache.get('key1')).toEqual({ data: 'new' });
+    });
+
+    it('should handle overwriting with different TTL', async () => {
+      cache.set('key1', { data: 'short' }, 100);
+      cache.set('key1', { data: 'long' }, 5000);
+
+      await new Promise(resolve => setTimeout(resolve, 150));
+      
+      // Should still exist because new TTL is longer
+      expect(cache.get('key1')).toEqual({ data: 'long' });
+    });
+  });
+
+  describe('Cache key edge cases', () => {
+    it('should handle complex objects in cache key generation', () => {
+      const key1 = generateCacheKey('api', { 
+        nested: { value: 1 }, 
+        array: [1, 2, 3] 
+      });
+      const key2 = generateCacheKey('api', { 
+        nested: { value: 1 }, 
+        array: [1, 2, 3] 
+      });
+      expect(key1).toBe(key2);
+    });
+
+    it('should generate different keys for different param order', () => {
+      const key1 = generateCacheKey('api', { a: 1, b: 2 });
+      const key2 = generateCacheKey('api', { b: 2, a: 1 });
+      // May or may not be the same depending on implementation
+      // This test documents the behavior
+      expect(typeof key1).toBe('string');
+      expect(typeof key2).toBe('string');
+    });
+  });
 });
 

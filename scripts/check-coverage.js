@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const COVERAGE_THRESHOLD = 15;
+const COVERAGE_THRESHOLD = 75;
 
 // Read coverage summary
 const coverageSummaryPath = path.join(__dirname, '../coverage/coverage-summary.json');

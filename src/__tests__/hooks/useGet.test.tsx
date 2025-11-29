@@ -1,10 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor, act } from '@testing-library/react';
 import { useGet } from '../../hooks/useGet';
+import { createCache } from '../../core/cache';
 
 describe('useGet', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Clear the global cache between tests
+    createCache().clear();
   });
 
   it('should fetch data on mount', async () => {
@@ -51,12 +54,16 @@ describe('useGet', () => {
     const { result } = renderHook(() => useGet(mockApi));
 
     await waitFor(() => {
+      expect(mockApi).toHaveBeenCalledTimes(1);
+    });
+
+    await waitFor(() => {
       expect(result.current.loading).toBe(false);
     });
 
-    expect(mockApi).toHaveBeenCalledTimes(1);
-
-    await result.current.refetch();
+    await act(async () => {
+      await result.current.refetch();
+    });
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
@@ -66,7 +73,10 @@ describe('useGet', () => {
   });
 
   it('should call onSuccess callback on successful fetch', async () => {
-    const mockData = [{ id: 1, title: 'Todo 1' }];
+    const mockData = [
+      { id: 1, title: 'Todo 1' },
+      { id: 2, title: 'Todo 2' },
+    ];
     const mockApi = vi.fn().mockResolvedValue(mockData);
     const onSuccess = vi.fn();
 
@@ -85,8 +95,14 @@ describe('useGet', () => {
     renderHook(() => useGet(mockApi, { onError }));
 
     await waitFor(() => {
-      expect(onError).toHaveBeenCalledWith(error);
+      expect(mockApi).toHaveBeenCalled();
     });
+
+    await waitFor(() => {
+      expect(onError).toHaveBeenCalled();
+    });
+    
+    expect(onError).toHaveBeenCalledWith(error);
   });
 
   it('should support caching', async () => {
@@ -97,11 +113,15 @@ describe('useGet', () => {
     );
 
     await waitFor(() => {
+      expect(mockApi).toHaveBeenCalled();
+    });
+
+    await waitFor(() => {
       expect(result1.current.loading).toBe(false);
     });
 
-    // Cache should work, but implementation might vary
-    expect(mockApi).toHaveBeenCalled();
+    expect(mockApi).toHaveBeenCalledTimes(1);
+    expect(result1.current.data).toHaveLength(1);
   });
 
   it('should provide abort function', () => {

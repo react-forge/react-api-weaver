@@ -3,6 +3,9 @@ import { UseApiOptions, UseApiResult, ApiFunction } from '../types';
 import { createCache, generateCacheKey } from '../core/cache';
 import { createPollingManager } from '../core/polling';
 
+// Global cache manager to persist cache across renders
+const globalCacheManager = createCache();
+
 /**
  * Base hook for API requests with caching, polling, and abort support
  */
@@ -27,7 +30,6 @@ export function useApi<TData = any, TParams = any>(
 
   const abortControllerRef = useRef<AbortController | null>(null);
   const pollingManagerRef = useRef(createPollingManager());
-  const cacheManager = createCache();
   const retryCountRef = useRef(0);
   const mountedRef = useRef(true);
 
@@ -55,7 +57,7 @@ export function useApi<TData = any, TParams = any>(
 
         // Check cache first for GET requests
         if (cache && useCache && method === 'GET') {
-          const cachedData = cacheManager.get<TData>(cacheKey);
+          const cachedData = globalCacheManager.get<TData>(cacheKey);
           if (cachedData) {
             setData(cachedData);
             setLoading(false);
@@ -73,7 +75,7 @@ export function useApi<TData = any, TParams = any>(
         if (cache && method === 'GET') {
           const ttl =
             typeof cache === 'object' && cache.ttl ? cache.ttl : 300000;
-          cacheManager.set(cacheKey, result, ttl);
+          globalCacheManager.set(cacheKey, result, ttl);
         }
 
         setData(result);

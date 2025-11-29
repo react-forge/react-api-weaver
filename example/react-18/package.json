@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-api-weaver": "^1.0.1",
+    "react-api-weaver": "^2.0.1",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
@@ -23,6 +23,9 @@
     "rollup-plugin-visualizer": "^6.0.5",
     "typescript": "^5.3.3",
     "vite": "^5.0.8"
+  },
+  "packageManager": "yarn@>=1.22.0",
+  "engines": {
+    "yarn": ">=1.22.0"
   }
 }
-

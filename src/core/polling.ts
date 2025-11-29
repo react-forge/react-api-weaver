@@ -15,10 +15,7 @@ export class PollingManager {
 
     this.isRunning = true;
     
-    // Execute immediately
-    Promise.resolve(callback()).catch(console.error);
-    
-    // Then execute at intervals
+    // Execute at intervals (don't execute immediately)
     this.intervalId = setInterval(() => {
       Promise.resolve(callback()).catch(console.error);
     }, interval);

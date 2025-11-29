@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createPollingManager } from '../../core/polling';
 
 describe('Polling Manager', () => {
@@ -62,6 +62,38 @@ describe('Polling Manager', () => {
     manager.start(callback, 1000);
     vi.advanceTimersByTime(1000);
     expect(callback).toHaveBeenCalledTimes(2);
+    
+    manager.stop();
+  });
+
+  it('should support changing polling interval', () => {
+    const manager = createPollingManager();
+    const callback = vi.fn();
+    
+    manager.start(callback, 1000);
+    vi.advanceTimersByTime(1000);
+    expect(callback).toHaveBeenCalledTimes(1);
+    
+    manager.stop();
+    manager.start(callback, 500);
+    vi.advanceTimersByTime(500);
+    expect(callback).toHaveBeenCalledTimes(2);
+    
+    vi.advanceTimersByTime(500);
+    expect(callback).toHaveBeenCalledTimes(3);
+    
+    manager.stop();
+  });
+
+  it('should not start if already started', () => {
+    const manager = createPollingManager();
+    const callback = vi.fn();
+    
+    manager.start(callback, 1000);
+    manager.start(callback, 1000); // Second start should be ignored
+    
+    vi.advanceTimersByTime(1000);
+    expect(callback).toHaveBeenCalledTimes(1);
     
     manager.stop();
   });

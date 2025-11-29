@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor, act } from '@testing-library/react';
 import { useApiOptimistic } from '../../hooks/useApiOptimistic';
 
 describe('useApiOptimistic', () => {
@@ -17,7 +17,9 @@ describe('useApiOptimistic', () => {
     const mockApi = vi.fn().mockResolvedValue({ id: 1, title: 'Test Todo' });
     const { result } = renderHook(() => useApiOptimistic(mockApi));
 
-    await result.current.mutate({ title: 'Test Todo' });
+    await act(async () => {
+      await result.current.mutate({ title: 'Test Todo' });
+    });
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
@@ -43,7 +45,9 @@ describe('useApiOptimistic', () => {
       useApiOptimistic(mockApi, { optimisticUpdate })
     );
 
-    result.current.mutate({ title: 'Test Todo' });
+    await act(async () => {
+      result.current.mutate({ title: 'Test Todo' });
+    });
 
     // Optimistic update should be called
     await waitFor(() => {
@@ -59,7 +63,9 @@ describe('useApiOptimistic', () => {
       useApiOptimistic(mockApi, { onError })
     );
 
-    await result.current.mutate({ title: 'Test Todo' });
+    await act(async () => {
+      await result.current.mutate({ title: 'Test Todo' });
+    });
 
     await waitFor(() => {
       expect(result.current.error).not.toBeNull();
@@ -77,7 +83,9 @@ describe('useApiOptimistic', () => {
       useApiOptimistic(mockApi, { onSuccess })
     );
 
-    await result.current.mutate({ title: 'Test Todo' });
+    await act(async () => {
+      await result.current.mutate({ title: 'Test Todo' });
+    });
 
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledWith({ id: 1, title: 'Test Todo' });
@@ -92,7 +100,9 @@ describe('useApiOptimistic', () => {
     expect(typeof result.current.abort).toBe('function');
     
     // Should not throw
-    result.current.abort();
+    act(() => {
+      result.current.abort();
+    });
   });
 });
 
