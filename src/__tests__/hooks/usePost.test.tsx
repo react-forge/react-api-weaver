@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor, act } from '@testing-library/react';
 import { usePost } from '../../hooks/usePost';
 
 describe('usePost', () => {
@@ -22,7 +22,9 @@ describe('usePost', () => {
       usePost(mockApi, { enabled: false })
     );
 
-    await result.current.refetch();
+    await act(async () => {
+      await result.current.refetch();
+    });
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
@@ -38,7 +40,9 @@ describe('usePost', () => {
       usePost(mockApi, { enabled: false })
     );
 
-    await result.current.refetch();
+    await act(async () => {
+      await result.current.refetch();
+    });
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
@@ -57,7 +61,9 @@ describe('usePost', () => {
       usePost(mockApi, { enabled: false, onSuccess })
     );
 
-    await result.current.refetch();
+    await act(async () => {
+      await result.current.refetch();
+    });
 
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledWith(mockData);
@@ -73,7 +79,9 @@ describe('usePost', () => {
       usePost(mockApi, { enabled: false, onError })
     );
 
-    await result.current.refetch();
+    await act(async () => {
+      await result.current.refetch();
+    });
 
     await waitFor(() => {
       expect(onError).toHaveBeenCalledWith(error);
@@ -87,14 +95,47 @@ describe('usePost', () => {
       usePost(mockApi, { enabled: false })
     );
 
-    await result.current.refetch();
+    await act(async () => {
+      await result.current.refetch();
+    });
     await waitFor(() => expect(result.current.loading).toBe(false));
     
-    await result.current.refetch();
+    await act(async () => {
+      await result.current.refetch();
+    });
     await waitFor(() => expect(result.current.loading).toBe(false));
 
     // Should call API twice (no caching)
     expect(mockApi).toHaveBeenCalledTimes(2);
+  });
+
+  it('should support multiple mutations', async () => {
+    const mockApi = vi.fn()
+      .mockResolvedValueOnce({ id: 1, title: 'First' })
+      .mockResolvedValueOnce({ id: 2, title: 'Second' })
+      .mockResolvedValueOnce({ id: 3, title: 'Third' });
+
+    const { result } = renderHook(() => usePost(mockApi, { enabled: false }));
+
+    await act(async () => {
+      await result.current.refetch();
+    });
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.data).toEqual({ id: 1, title: 'First' });
+
+    await act(async () => {
+      await result.current.refetch();
+    });
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.data).toEqual({ id: 2, title: 'Second' });
+
+    await act(async () => {
+      await result.current.refetch();
+    });
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.data).toEqual({ id: 3, title: 'Third' });
+
+    expect(mockApi).toHaveBeenCalledTimes(3);
   });
 });
 

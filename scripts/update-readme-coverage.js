@@ -24,12 +24,28 @@ const metrics = {
   lines: totals.lines.pct.toFixed(2),
 };
 
-// Create coverage section
+// Helper function to get status indicator
+function getStatusIndicator(value) {
+  const numValue = parseFloat(value);
+  if (numValue >= 85) return '✅';
+  if (numValue >= 60) return '⚠️';
+  return '❌';
+}
+
+// Get current timestamp
+const lastUpdated = new Date().toISOString().split('T')[0];
+
+// Create coverage section in table format
 const coverageSection = `## Test Coverage
-- **Statements**: ${metrics.statements}%
-- **Branches**: ${metrics.branches}%
-- **Functions**: ${metrics.functions}%
-- **Lines**: ${metrics.lines}%
+
+| Metric | Coverage | Status |
+|--------|----------|--------|
+| Statements | ${metrics.statements}% | ${getStatusIndicator(metrics.statements)} |
+| Branches | ${metrics.branches}% | ${getStatusIndicator(metrics.branches)} |
+| Functions | ${metrics.functions}% | ${getStatusIndicator(metrics.functions)} |
+| Lines | ${metrics.lines}% | ${getStatusIndicator(metrics.lines)} |
+
+*Last Updated: ${lastUpdated}*
 
 `;
 
@@ -37,8 +53,8 @@ const coverageSection = `## Test Coverage
 const readmePath = path.join(__dirname, '../README.md');
 let readmeContent = fs.readFileSync(readmePath, 'utf8');
 
-// Check if coverage section exists
-const coverageSectionRegex = /## Test Coverage\n(?:- \*\*[^*]+\*\*: [0-9.]+%\n)+\n/;
+// Check if coverage section exists (match both old and new formats)
+const coverageSectionRegex = /## Test Coverage\n(?:[\s\S]*?)(?=\n##|\n$|Convert OpenAPI)/;
 
 if (coverageSectionRegex.test(readmeContent)) {
   // Update existing coverage section

@@ -1,10 +1,15 @@
 # ⚡ React API Weaver
 
 ## Test Coverage
-- **Statements**: 15.84%
-- **Branches**: 37.83%
-- **Functions**: 36.00%
-- **Lines**: 15.84%
+
+| Metric | Coverage | Status |
+|--------|----------|--------|
+| Statements | 86.61% | ✅ |
+| Branches | 76.35% | ⚠️ |
+| Functions | 90.24% | ✅ |
+| Lines | 86.61% | ✅ |
+
+*Last Updated: 2025-11-29*
 
 Convert OpenAPI/Swagger YAML specifications into typed React hooks with caching, polling, and cancellation support.
 
