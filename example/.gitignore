@@ -7,4 +7,5 @@ coverage/
 .env.local
 *.tsbuildinfo
 src/generated/
+bundle-report.html
 

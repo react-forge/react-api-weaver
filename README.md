@@ -1,5 +1,11 @@
 # ⚡ React API Weaver
 
+## Test Coverage
+- **Statements**: 15.84%
+- **Branches**: 37.83%
+- **Functions**: 36.00%
+- **Lines**: 15.84%
+
 Convert OpenAPI/Swagger YAML specifications into typed React hooks with caching, polling, and cancellation support.
 
 ## 🌟 Features
@@ -799,7 +805,7 @@ const { formAction } = useApiAction(createTodo);
 ### Potential Future Features
 - [x] Optimistic updates (React 19)
 - [x] Form actions (React 19)
-- [ ] Automated testing (Jest + React Testing Library)
+- [x] Automated testing (Jest + React Testing Library)
 - [ ] React Query integration
 - [ ] Middleware support (interceptors)
 - [ ] WebSocket support

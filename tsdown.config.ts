@@ -10,6 +10,7 @@ export default defineConfig([
     sourcemap: true,
     external: ['react'],
     treeshake: true,
+    platform: 'browser',
   },
   // CLI bundle
   {
