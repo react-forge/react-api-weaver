@@ -16,5 +16,13 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  resolve: {
+    alias: {
+      module: false,
+    },
+  },
+  optimizeDeps: {
+    exclude: ['react-api-weaver'],
+  },
 });
 

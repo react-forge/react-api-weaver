@@ -11,7 +11,7 @@ interface Todo {
 
 const FormActionExample: React.FC = () => {
   const { data, error, isPending, formAction } = useApiAction<Todo, { title: string; completed: string }>(
-    (input) => {
+    (input: { title: string; completed: string }) => {
       // Convert form data to API format
       return createTodo({
         userId: 1,
@@ -20,7 +20,7 @@ const FormActionExample: React.FC = () => {
       });
     },
     {
-      onSuccess: (data) => {
+      onSuccess: (data: Todo) => {
         console.log('Todo created via form action:', data);
       },
     }

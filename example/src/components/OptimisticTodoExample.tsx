@@ -14,9 +14,9 @@ const OptimisticTodoExample: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const { optimisticData, loading, error, mutate } = usePostOptimistic<Todo, { userId: number; title: string; completed: boolean }>(
-    (input) => createTodo(input),
+    (input: { userId: number; title: string; completed: boolean }) => createTodo(input),
     {
-      optimisticUpdate: (currentData, input) => {
+      optimisticUpdate: (_currentData, input: { userId: number; title: string; completed: boolean }) => {
         // Optimistically add the new todo with a temporary ID
         const optimisticTodo: Todo = {
           id: Date.now(), // Temporary ID
@@ -26,12 +26,12 @@ const OptimisticTodoExample: React.FC = () => {
         };
         return optimisticTodo;
       },
-      onSuccess: (data) => {
+      onSuccess: (data: Todo) => {
         // Add the real todo from server to our list
         setTodos((prev) => [...prev, data]);
         setTitle('');
       },
-      onError: (err) => {
+      onError: (err: Error) => {
         console.error('Failed to create todo:', err);
       },
     }
