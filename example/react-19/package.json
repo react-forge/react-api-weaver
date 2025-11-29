@@ -1,0 +1,28 @@
+{
+  "name": "react-api-weaver-example-react-19",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "predev": "react-api-weaver generate -i service-storybook/todo-api.yaml -o src/generated/todo-api-client",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "analyze": "vite build",
+    "preview": "vite preview",
+    "generate": "react-api-weaver generate -i service-storybook/todo-api.yaml -o src/generated/todo-api-client"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-api-weaver": "^1.0.1",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "rollup-plugin-visualizer": "^6.0.5",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8"
+  }
+}
+
