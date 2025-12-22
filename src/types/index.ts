@@ -17,6 +17,22 @@ export interface CacheConfig {
 }
 
 /**
+ * Cache strategy for hybrid caching (React 19)
+ */
+export interface CacheStrategy extends CacheConfig {
+  /**
+   * Enable React 19's native cache for automatic request deduplication
+   * Default: true
+   */
+  useNativeCache?: boolean;
+  /**
+   * Enable TTL-based caching via CacheManager
+   * Default: true
+   */
+  useTtlCache?: boolean;
+}
+
+/**
  * Options for API hooks
  */
 export interface UseApiOptions<TData = any> {
@@ -67,7 +83,7 @@ export type OptimisticUpdateFn<TData, TInput = any> = (
 ) => TData;
 
 /**
- * Options for useApiOptimistic hook (React 19+)
+ * Options for useApiOptimistic hook
  */
 export interface UseApiOptimisticOptions<TData = any, TInput = any> extends Omit<UseApiOptions<TData>, 'enabled'> {
   optimisticUpdate?: OptimisticUpdateFn<TData, TInput>;
@@ -75,7 +91,7 @@ export interface UseApiOptimisticOptions<TData = any, TInput = any> extends Omit
 }
 
 /**
- * Return type for useApiOptimistic hook (React 19+)
+ * Return type for useApiOptimistic hook
  */
 export interface UseApiOptimisticResult<TData = any, TInput = any> {
   data: TData | null;
@@ -87,7 +103,7 @@ export interface UseApiOptimisticResult<TData = any, TInput = any> {
 }
 
 /**
- * Options for useApiAction hook (React 19+)
+ * Options for useApiAction hook
  */
 export interface UseApiActionOptions<TData = any> {
   onSuccess?: (data: TData) => void;
@@ -96,7 +112,7 @@ export interface UseApiActionOptions<TData = any> {
 }
 
 /**
- * Return type for useApiAction hook (React 19+)
+ * Return type for useApiAction hook
  */
 export interface UseApiActionResult<TData = any, TInput = any> {
   data: TData | null;
@@ -106,3 +122,41 @@ export interface UseApiActionResult<TData = any, TInput = any> {
   formAction: (formData: FormData) => Promise<void>;
 }
 
+// ============================================
+// React 19 Suspense-specific types
+// ============================================
+
+/**
+ * Options for Suspense-based API hooks (React 19)
+ * Used with useSuspenseApi, useSuspenseGet, etc.
+ */
+export interface UseSuspenseApiOptions<TData = any> {
+  cache?: boolean | CacheConfig | CacheStrategy;
+  enabled?: boolean; // Whether the request should be executed
+  onSuccess?: (data: TData) => void;
+  onError?: (error: Error) => void;
+}
+
+/**
+ * Return type for Suspense-based API hooks (React 19)
+ * Note: No loading or error state - handled by Suspense and ErrorBoundary
+ */
+export interface UseSuspenseApiResult<TData = any> {
+  data: TData;
+  refetch: () => Promise<void>;
+  abort: () => void;
+}
+
+/**
+ * Options for useSuspenseGet hook (React 19)
+ */
+export interface UseSuspenseGetOptions<TData = any> extends UseSuspenseApiOptions<TData> {
+  // GET-specific options can be added here
+}
+
+/**
+ * Return type for useSuspenseGet hook (React 19)
+ */
+export interface UseSuspenseGetResult<TData = any> extends UseSuspenseApiResult<TData> {
+  // GET-specific result properties can be added here
+}

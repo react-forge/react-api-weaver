@@ -4,12 +4,12 @@
 
 | Metric | Coverage | Status |
 |--------|----------|--------|
-| Statements | 86.61% | ✅ |
-| Branches | 76.35% | ⚠️ |
-| Functions | 90.24% | ✅ |
-| Lines | 86.61% | ✅ |
+| Statements | 58.12% | ❌ |
+| Branches | 71.96% | ⚠️ |
+| Functions | 72.05% | ⚠️ |
+| Lines | 58.12% | ❌ |
 
-*Last Updated: 2025-11-29*
+*Last Updated: 2025-12-22*
 
 Convert OpenAPI/Swagger YAML specifications into typed React hooks with caching, polling, and cancellation support.
 
