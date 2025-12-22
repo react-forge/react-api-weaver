@@ -54,22 +54,29 @@ const readmePath = path.join(__dirname, '../README.md');
 let readmeContent = fs.readFileSync(readmePath, 'utf8');
 
 // Check if coverage section exists (match both old and new formats)
-const coverageSectionRegex = /## Test Coverage\n(?:[\s\S]*?)(?=\n##|\n$|Convert OpenAPI)/;
+const coverageSectionRegex = /## Test Coverage\n(?:[\s\S]*?)(?=\n##|\n$)/;
 
 if (coverageSectionRegex.test(readmeContent)) {
-  // Update existing coverage section
-  readmeContent = readmeContent.replace(coverageSectionRegex, coverageSection);
-  console.log('📝 Updated existing coverage section in README.md');
+  // Remove existing coverage section first
+  readmeContent = readmeContent.replace(coverageSectionRegex, '');
+  console.log('📝 Removed existing coverage section from README.md');
+}
+
+// Always insert coverage section after installation section
+const installationRegex = /(## 📦 Installation\n(?:[\s\S]*?)```\n\n)/;
+if (installationRegex.test(readmeContent)) {
+  readmeContent = readmeContent.replace(installationRegex, `$1${coverageSection}`);
+  console.log('📝 Added coverage section after installation in README.md');
 } else {
-  // Add coverage section after the title
+  // Fallback: add after title if installation section not found
   const titleRegex = /(# ⚡ React API Weaver\n\n)/;
   if (titleRegex.test(readmeContent)) {
     readmeContent = readmeContent.replace(titleRegex, `$1${coverageSection}`);
-    console.log('📝 Added new coverage section to README.md');
+    console.log('📝 Added coverage section after title in README.md (fallback)');
   } else {
-    // Fallback: add at the beginning
+    // Last resort: add at the beginning
     readmeContent = coverageSection + readmeContent;
-    console.log('📝 Added coverage section at the beginning of README.md');
+    console.log('📝 Added coverage section at the beginning of README.md (fallback)');
   }
 }
 
