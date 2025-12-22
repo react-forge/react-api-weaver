@@ -3,7 +3,29 @@
 const fs = require('fs');
 const path = require('path');
 
-const COVERAGE_THRESHOLD = 75;
+// Read thresholds from vitest.config.ts to ensure single source of truth
+function getThresholdsFromConfig() {
+  const configPath = path.join(__dirname, '../vitest.config.ts');
+  const configContent = fs.readFileSync(configPath, 'utf8');
+  
+  // Extract thresholds from config file
+  const thresholdsMatch = configContent.match(/thresholds:\s*\{[^}]*statements:\s*(\d+)[^}]*branches:\s*(\d+)[^}]*functions:\s*(\d+)[^}]*lines:\s*(\d+)/);
+  
+  if (thresholdsMatch) {
+    return {
+      statements: parseInt(thresholdsMatch[1]),
+      branches: parseInt(thresholdsMatch[2]),
+      functions: parseInt(thresholdsMatch[3]),
+      lines: parseInt(thresholdsMatch[4]),
+    };
+  }
+  
+  // Fallback to 40% if parsing fails
+  console.warn('⚠️  Could not parse thresholds from vitest.config.ts, using default 40%');
+  return { statements: 40, branches: 40, functions: 40, lines: 40 };
+}
+
+const THRESHOLDS = getThresholdsFromConfig();
 
 // Read coverage summary
 const coverageSummaryPath = path.join(__dirname, '../coverage/coverage-summary.json');
@@ -36,19 +58,21 @@ console.log('━━━━━━━━━━━━━━━━━━━━━━�
 // Check if all metrics meet threshold
 const failures = [];
 Object.entries(metrics).forEach(([metric, value]) => {
-  if (value < COVERAGE_THRESHOLD) {
-    failures.push(`${metric}: ${value.toFixed(2)}% (required: ${COVERAGE_THRESHOLD}%)`);
+  const threshold = THRESHOLDS[metric];
+  if (value < threshold) {
+    failures.push(`${metric}: ${value.toFixed(2)}% (required: ${threshold}%)`);
   }
 });
 
 if (failures.length > 0) {
   console.error('❌ Coverage check FAILED!');
-  console.error(`\nThe following metrics are below ${COVERAGE_THRESHOLD}%:`);
+  console.error('\nThe following metrics are below their thresholds:');
   failures.forEach(failure => console.error(`  - ${failure}`));
   console.error('\nPlease add more tests to increase coverage.\n');
   process.exit(1);
 }
 
-console.log(`✅ All coverage metrics meet the ${COVERAGE_THRESHOLD}% threshold!\n`);
+console.log(`✅ All coverage metrics meet their required thresholds!`);
+console.log(`   (statements: ${THRESHOLDS.statements}%, branches: ${THRESHOLDS.branches}%, functions: ${THRESHOLDS.functions}%, lines: ${THRESHOLDS.lines}%)\n`);
 process.exit(0);
 

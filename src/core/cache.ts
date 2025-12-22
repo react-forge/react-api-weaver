@@ -1,12 +1,12 @@
 // import { CacheConfig } from '../types';
 
-interface CacheEntry<T> {
+export interface CacheEntry<T> {
   data: T;
   timestamp: number;
   ttl: number;
 }
 
-class CacheManager {
+export class CacheManager {
   private cache: Map<string, CacheEntry<any>>;
 
   constructor() {
@@ -58,9 +58,9 @@ class CacheManager {
 }
 
 // Singleton instance
-const cacheManager = new CacheManager();
+const cacheManagerInstance = new CacheManager();
 
-export const createCache = () => cacheManager;
+export const createCache = (): CacheManager => cacheManagerInstance;
 
 export const generateCacheKey = (
   url: string,
@@ -74,4 +74,3 @@ export const generateCacheKey = (
   const paramStr = params ? JSON.stringify(params) : '';
   return `${url}:${paramStr}`;
 };
-

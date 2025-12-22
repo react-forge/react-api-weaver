@@ -2,13 +2,13 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 echo "Running tests with coverage..."
-npm run test:coverage
+yarn test:coverage
 
-echo "Checking coverage threshold (85%)..."
-npm run coverage:check
+echo "Checking coverage thresholds..."
+yarn coverage:check
 
 echo "Updating README with coverage stats..."
-npm run coverage:update-readme
+yarn coverage:update-readme
 
 echo "Adding updated README to commit..."
 git add README.md

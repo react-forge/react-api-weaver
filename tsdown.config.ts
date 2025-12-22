@@ -12,6 +12,34 @@ export default defineConfig([
     treeshake: true,
     platform: 'browser',
   },
+  // React 18 specific bundle
+  {
+    entry: {
+      'react18/index': 'src/hooks/react18/index.ts',
+    },
+    format: ['cjs', 'esm'],
+    outDir: 'dist',
+    dts: true,
+    clean: false,
+    sourcemap: true,
+    external: ['react'],
+    treeshake: true,
+    platform: 'browser',
+  },
+  // React 19 specific bundle
+  {
+    entry: {
+      'react19/index': 'src/hooks/react19/index.ts',
+    },
+    format: ['cjs', 'esm'],
+    outDir: 'dist',
+    dts: true,
+    clean: false,
+    sourcemap: true,
+    external: ['react'],
+    treeshake: true,
+    platform: 'browser',
+  },
   // CLI bundle
   {
     entry: {
@@ -35,4 +63,3 @@ export default defineConfig([
     ],
   },
 ]);
-

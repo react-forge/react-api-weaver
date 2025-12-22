@@ -1,42 +1,43 @@
-// Export types
+// Export types - always available
 export type {
   RequestConfig,
   CacheConfig,
+  CacheStrategy,
   UseApiOptions,
   UseApiResult,
   ApiFunction,
   GeneratorConfig,
-  // React 19+ types
   OptimisticUpdateFn,
   UseApiOptimisticOptions,
   UseApiOptimisticResult,
   UseApiActionOptions,
   UseApiActionResult,
+  // React 19 Suspense types
+  UseSuspenseApiOptions,
+  UseSuspenseApiResult,
+  UseSuspenseGetOptions,
+  UseSuspenseGetResult,
 } from './types';
 
-// Export standard hooks
-export { useGet } from './hooks/useGet';
-export { usePost } from './hooks/usePost';
-export { usePut } from './hooks/usePut';
-export { usePatch } from './hooks/usePatch';
-export { useDelete } from './hooks/useDelete';
-
-// Export React 19+ hooks (with backward compatibility)
-export { useApiOptimistic } from './hooks/useApiOptimistic';
-export { useApiAction } from './hooks/useApiAction';
-export { usePostOptimistic } from './hooks/usePostOptimistic';
-export { usePutOptimistic } from './hooks/usePutOptimistic';
-export { usePatchOptimistic } from './hooks/usePatchOptimistic';
-export { useDeleteOptimistic } from './hooks/useDeleteOptimistic';
-
-// Export core utilities
-export { createCache } from './core/cache';
-export { makeRequest } from './core/request';
-
-// Export React version utilities
+// Export React version utilities - always available
 export { 
   getReactMajorVersion, 
   isReact19OrLater, 
   isReact18OrLater 
 } from './utils/react-version';
 
+// Export core utilities - always available
+export { createCache } from './core/cache';
+export { makeRequest } from './core/request';
+
+// Re-export React 18 compatible hooks as default exports
+// These work with React 17, 18, and 19
+export * from './hooks/react18';
+
+// NOTE: React 19 specific features (useSuspenseApi, useSuspenseGet, createCachedFetch, etc.)
+// are NOT exported from the main entry point to maintain React 18 compatibility.
+// 
+// To use React 19 features, import from the /react19 subpath:
+//   import { useSuspenseGet, createCachedFetch } from 'react-api-weaver/react19';
+//
+// This ensures users on React 18 won't get import errors from React 19-only APIs.
