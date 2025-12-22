@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { 
   UseApiOptimisticOptions, 
   UseApiOptimisticResult, 
@@ -103,6 +103,16 @@ export function useApiOptimistic<TData = any, TInput = any>(
       abortControllerRef.current.abort();
     }
   }, []);
+
+  // Cleanup effect
+  useEffect(() => {
+    mountedRef.current = true;
+
+    return () => {
+      mountedRef.current = false;
+      abort();
+    };
+  }, [abort]);
 
   return {
     data,
