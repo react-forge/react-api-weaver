@@ -1,6 +1,6 @@
 {
   "name": "react-api-weaver",
-  "version": "2.0.2-alpha.0",
+  "version": "2.0.2-alpha.1",
   "description": "Convert OpenAPI YAML specs into typed React hooks with caching, polling, and cancellation support. Now with React 19 support!",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
