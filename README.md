@@ -4,10 +4,10 @@
 
 | Metric | Coverage | Status |
 |--------|----------|--------|
-| Statements | 58.12% | ❌ |
-| Branches | 71.96% | ⚠️ |
-| Functions | 72.05% | ⚠️ |
-| Lines | 58.12% | ❌ |
+| Statements | 63.40% | ⚠️ |
+| Branches | 79.70% | ⚠️ |
+| Functions | 75.43% | ⚠️ |
+| Lines | 63.40% | ⚠️ |
 
 *Last Updated: 2025-12-22*
 
