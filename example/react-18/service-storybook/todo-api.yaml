@@ -1,0 +1,220 @@
+openapi: 3.0.0
+info:
+  title: Todo API
+  version: 1.0.0
+  description: A simple Todo API for demonstration
+
+servers:
+  - url: https://jsonplaceholder.typicode.com
+
+paths:
+  /todos:
+    get:
+      operationId: getTodos
+      summary: Get all todos
+      description: Retrieve a list of all todos
+      parameters:
+        - name: _limit
+          in: query
+          description: Limit the number of results
+          schema:
+            type: integer
+          required: false
+        - name: _page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+          required: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Todo'
+    post:
+      operationId: createTodo
+      summary: Create a new todo
+      description: Add a new todo item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoInput'
+      responses:
+        '201':
+          description: Todo created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+
+  /todos/{id}:
+    get:
+      operationId: getTodoById
+      summary: Get a todo by ID
+      description: Retrieve a specific todo by its ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the todo
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+    put:
+      operationId: updateTodo
+      summary: Update a todo
+      description: Update an existing todo item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the todo
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoInput'
+      responses:
+        '200':
+          description: Todo updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+    patch:
+      operationId: patchTodo
+      summary: Partially update a todo
+      description: Update specific fields of a todo item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the todo
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                completed:
+                  type: boolean
+      responses:
+        '200':
+          description: Todo updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+    delete:
+      operationId: deleteTodo
+      summary: Delete a todo
+      description: Remove a todo item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the todo
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Todo deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /users:
+    get:
+      operationId: getUsers
+      summary: Get all users
+      description: Retrieve a list of all users
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+components:
+  schemas:
+    Todo:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The todo ID
+        userId:
+          type: integer
+          description: The user ID who owns this todo
+        title:
+          type: string
+          description: The todo title
+        completed:
+          type: boolean
+          description: Whether the todo is completed
+      required:
+        - id
+        - userId
+        - title
+        - completed
+
+    TodoInput:
+      type: object
+      properties:
+        userId:
+          type: integer
+          description: The user ID who owns this todo
+        title:
+          type: string
+          description: The todo title
+        completed:
+          type: boolean
+          description: Whether the todo is completed
+          default: false
+      required:
+        - userId
+        - title
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The user ID
+        name:
+          type: string
+          description: The user's name
+        email:
+          type: string
+          description: The user's email
+        username:
+          type: string
+          description: The user's username
+      required:
+        - id
+        - name
+        - email
+        - username
+

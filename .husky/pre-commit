@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running tests with coverage..."
+yarn test:coverage
+
+echo "Checking coverage thresholds..."
+yarn coverage:check
+
+echo "Updating README with coverage stats..."
+yarn coverage:update-readme
+
+echo "Adding updated README to commit..."
+git add README.md
+
+echo "✅ All checks passed!"

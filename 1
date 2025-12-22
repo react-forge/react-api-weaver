@@ -1,0 +1,228 @@
+added type export as well
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Committer: Ajay Kumar <ajaykumar@Ajays-MacBook-Pro-2.local>
+#
+# On branch master
+# Your branch is up to date with 'origin/master'.
+#
+# Changes to be committed:
+#	modified:   README.md
+#	modified:   src/cli/index.ts
+#	modified:   src/generator/codegen.ts
+#
+# ------------------------ >8 ------------------------
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+diff --git a/README.md b/README.md
+index e3a3628..05e3133 100644
+--- a/README.md
++++ b/README.md
+@@ -61,7 +61,10 @@ paths:
+ npx react-api-weaver generate -i api.yaml -o src/generated
+ ```
+ 
+-This generates TypeScript functions and types in `src/generated/api.ts`.
++This generates TypeScript functions and types:
++- `src/generated/api.ts` - API functions
++- `src/generated/types.ts` - TypeScript types/interfaces for requests and responses
++- `src/generated/index.ts` - Exports for easy importing
+ 
+ ### 3. Use the generated hooks in your React components
+ 
+@@ -393,14 +396,50 @@ You can set a base URL in three ways:
+ your-project/
+ ├── src/
+ │   ├── generated/          # Generated API code
+-│   │   ├── api.ts          # Generated functions and types
+-│   │   └── index.ts        # Exports
++│   │   ├── api.ts          # Generated API functions
++│   │   ├── types.ts        # TypeScript types/interfaces
++│   │   └── index.ts        # Exports (functions + types)
+ │   └── components/
+ │       └── UserList.tsx    # Your components using hooks
+ ├── api.yaml                # OpenAPI specification
+ └── package.json
+ ```
+ 
++## 📘 Type Exports
++
++All TypeScript types are exported from the generated `types.ts` file. You can import types separately from functions:
++
++```tsx
++// Import functions
++import { getUsers, createUser } from './generated/api';
++
++// Import types separately
++import type { GetUsersResponse, CreateUserBody, CreateUserResponse } from './generated/types';
++
++// Or import everything from index
++import { getUsers, type GetUsersResponse } from './generated';
++```
++
++**Available Types:**
++- `{OperationName}Params` - Request parameters (for GET, DELETE, etc.)
++- `{OperationName}Body` - Request body (for POST, PUT, PATCH)
++- `{OperationName}Response` - Response data type
++
++**Example:**
++```tsx
++import { getTodoById } from './generated/api';
++import type { GetTodoByIdParams, GetTodoByIdResponse } from './generated/types';
++
++function TodoComponent({ todoId }: { todoId: number }) {
++  const params: GetTodoByIdParams = { id: todoId };
++  const { data } = useGet<GetTodoByIdResponse>(
++    () => getTodoById(params)
++  );
++  
++  return <div>{data?.title}</div>;
++}
++```
++
+ ## 🛠️ Development Workflow
+ 
+ ### Option 1: Manual Generation
+diff --git a/src/cli/index.ts b/src/cli/index.ts
+index 60b31ca..fb3dd96 100644
+--- a/src/cli/index.ts
++++ b/src/cli/index.ts
+@@ -3,7 +3,7 @@ import * as fs from 'fs';
+ import * as path from 'path';
+ import { watch } from 'chokidar';
+ import { parseOpenAPI } from '../generator/parser';
+-import { generateTypeScriptCode, generateJavaScriptCode } from '../generator/codegen';
++import { generateTypeScriptCode, generateJavaScriptCode, generateTypeScriptTypes } from '../generator/codegen';
+ 
+ const program = new Command();
+ 
+@@ -88,6 +88,14 @@ async function generateCode(options: {
+     // Generate TypeScript code
+     if (format === 'ts' || format === 'both') {
+       console.log('🔨 Generating TypeScript code...');
++      
++      // Generate types file
++      const typesCode = generateTypeScriptTypes(parsedAPI);
++      const typesOutputPath = path.join(output, 'types.ts');
++      fs.writeFileSync(typesOutputPath, typesCode);
++      console.log(`✅ Generated types: ${typesOutputPath}`);
++      
++      // Generate API functions file
+       const tsCode = generateTypeScriptCode(parsedAPI, baseUrl);
+       const tsOutputPath = path.join(output, 'api.ts');
+       fs.writeFileSync(tsOutputPath, tsCode);
+@@ -115,7 +123,7 @@ async function generateCode(options: {
+ 
+ function generateIndexFile(output: string, format: string) {
+   if (format === 'ts' || format === 'both') {
+-    const indexContent = `export * from './api';\n`;
++    const indexContent = `export * from './api';\nexport * from './types';\n`;
+     fs.writeFileSync(path.join(output, 'index.ts'), indexContent);
+   }
+ 
+diff --git a/src/generator/codegen.ts b/src/generator/codegen.ts
+index b149ed4..c1b30e1 100644
+--- a/src/generator/codegen.ts
++++ b/src/generator/codegen.ts
+@@ -4,22 +4,18 @@ import { ParsedAPI, ParsedOperation, GeneratedFunction } from './types';
+ /**
+  * Generate TypeScript code from parsed OpenAPI document
+  */
+-export function generateTypeScriptCode(parsedAPI: ParsedAPI, baseURL?: string): string {
+-  const { info, servers, operations } = parsedAPI;
+-  const defaultBaseURL = baseURL || servers?.[0]?.url || '';
++export function generateTypeScriptTypes(parsedAPI: ParsedAPI): string {
++  const { info, operations } = parsedAPI;
+ 
+   let code = `/**
+  * Generated by react-api-weaver
+  * ${info.title} - ${info.version}
+  * ${info.description || ''}
+  * Do not edit manually
++ * 
++ * This file contains all TypeScript types/interfaces for API requests and responses.
+  */
+ 
+-import { makeRequest } from 'react-api-weaver';
+-import type { RequestConfig } from 'react-api-weaver';
+-
+-const BASE_URL = '${defaultBaseURL}';
+-
+ `;
+ 
+   // Generate interfaces and functions for each operation
+@@ -40,8 +36,38 @@ const BASE_URL = '${defaultBaseURL}';
+     if (generatedFunc.returnInterface) {
+       code += generatedFunc.returnInterface + '\n\n';
+     }
++  }
++
++  return code;
++}
++
++/**
++ * Generate TypeScript code from parsed OpenAPI document
++ */
++export function generateTypeScriptCode(parsedAPI: ParsedAPI, baseURL?: string): string {
++  const { info, servers, operations } = parsedAPI;
++  const defaultBaseURL = baseURL || servers?.[0]?.url || '';
++
++  let code = `/**
++ * Generated by react-api-weaver
++ * ${info.title} - ${info.version}
++ * ${info.description || ''}
++ * Do not edit manually
++ */
++
++import { makeRequest } from 'react-api-weaver';
++import type { RequestConfig } from 'react-api-weaver';
++import type * as ApiTypes from './types';
+ 
+-    // Add function
++const BASE_URL = '${defaultBaseURL}';
++
++`;
++
++  // Generate functions for each operation (types are imported from types.ts)
++  for (const operation of operations) {
++    const generatedFunc = generateFunctionFromOperation(operation);
++    
++    // Add function (types are imported from types.ts)
+     code += generateFunctionCode(generatedFunc) + '\n\n';
+   }
+ 
+@@ -251,13 +277,13 @@ function generateFunctionCode(func: GeneratedFunction): string {
+   const params: string[] = [];
+   
+   if (paramsType) {
+-    params.push(`params: ${paramsType}`);
++    params.push(`params: ApiTypes.${paramsType}`);
+   } else if (method === 'GET') {
+     params.push('params?: Record<string, any>');
+   }
+   
+   if (bodyType) {
+-    params.push(`body: ${bodyType}`);
++    params.push(`body: ApiTypes.${bodyType}`);
+   } else if (['POST', 'PUT', 'PATCH'].includes(method)) {
+     params.push('body?: any');
+   }
+@@ -269,7 +295,7 @@ function generateFunctionCode(func: GeneratedFunction): string {
+   // Build function body
+   const pathWithParams = path.replace(/\{([^}]+)\}/g, (_, param) => `\${params.${param}}`);
+   
+-  let functionBody = `  return makeRequest<${returnType}>({\n`;
++  let functionBody = `  return makeRequest<ApiTypes.${returnType}>({\n`;
+   functionBody += `    method: '${method}',\n`;
+   functionBody += `    url: \`${pathWithParams}\`,\n`;
+   
+@@ -283,7 +309,7 @@ function generateFunctionCode(func: GeneratedFunction): string {
+   functionBody += `    ...config,\n`;
+   functionBody += `  });\n`;
+ 
+-  return `${descComment}export async function ${name}(${paramString}): Promise<${returnType}> {\n${functionBody}}`;
++  return `${descComment}export async function ${name}(${paramString}): Promise<ApiTypes.${returnType}> {\n${functionBody}}`;
+ }
+ 
+ /**
