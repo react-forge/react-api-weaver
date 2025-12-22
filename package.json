@@ -1,6 +1,6 @@
 {
   "name": "react-api-weaver",
-  "version": "2.0.1",
+  "version": "2.0.2-alpha.0",
   "description": "Convert OpenAPI YAML specs into typed React hooks with caching, polling, and cancellation support. Now with React 19 support!",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -45,7 +45,13 @@
     "coverage:update-readme": "node scripts/update-readme-coverage.js",
     "prepublishOnly": "npm run build",
     "link:example": "npm link && cd example && npm link react-api-weaver",
-    "prepare": "husky"
+    "prepare": "husky",
+    "version:alpha": "npm version prerelease --preid=alpha",
+    "version:rc": "npm version prerelease --preid=rc",
+    "version:stable": "npm version patch",
+    "publish:alpha": "npm publish --tag alpha",
+    "publish:rc": "npm publish --tag rc",
+    "publish:stable": "npm publish --tag latest"
   },
   "keywords": [
     "react",

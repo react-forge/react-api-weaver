@@ -1,17 +1,5 @@
 # ⚡ React API Weaver
 
-## Test Coverage
-
-| Metric | Coverage | Status |
-|--------|----------|--------|
-| Statements | 63.40% | ⚠️ |
-| Branches | 79.70% | ⚠️ |
-| Functions | 75.43% | ⚠️ |
-| Lines | 63.40% | ⚠️ |
-
-*Last Updated: 2025-12-22*
-
-Convert OpenAPI/Swagger YAML specifications into typed React hooks with caching, polling, and cancellation support.
 
 ## 🌟 Features
 
@@ -34,6 +22,18 @@ Convert OpenAPI/Swagger YAML specifications into typed React hooks with caching,
 ```bash
 npm install react-api-weaver
 ```
+
+## Test Coverage
+
+| Metric | Coverage | Status |
+|--------|----------|--------|
+| Statements | 63.40% | ⚠️ |
+| Branches | 79.70% | ⚠️ |
+| Functions | 75.43% | ⚠️ |
+| Lines | 63.40% | ⚠️ |
+
+*Last Updated: 2025-12-22*
+
 
 ## 🚀 Quick Start
 
