@@ -27,12 +27,12 @@ npm install react-api-weaver
 
 | Metric | Coverage | Status |
 |--------|----------|--------|
-| Statements | 80.49% | ⚠️ |
-| Branches | 81.45% | ⚠️ |
-| Functions | 83.60% | ⚠️ |
-| Lines | 80.49% | ⚠️ |
+| Statements | 85.27% | ✅ |
+| Branches | 83.46% | ⚠️ |
+| Functions | 90.16% | ✅ |
+| Lines | 85.27% | ✅ |
 
-*Last Updated: 2025-12-22*
+*Last Updated: 2025-12-23*
 
 
 ## 🚀 Quick Start
