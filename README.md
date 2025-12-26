@@ -1,21 +1,55 @@
-# ⚡ React API Weaver
+<div align="center">
 
+# React API Weaver
+
+[![npm version](https://img.shields.io/npm/v/react-api-weaver.svg?style=flat-square&color=blue)](https://www.npmjs.com/package/react-api-weaver)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-17%20%7C%2018%20%7C%2019-61DAFB.svg?style=flat-square&logo=react)](https://reactjs.org/)
+[![npm downloads](https://img.shields.io/npm/dm/react-api-weaver.svg?style=flat-square)](https://www.npmjs.com/package/react-api-weaver)
+
+**Transform OpenAPI/Swagger specs into type-safe React hooks with superpowers**
+
+[Installation](#-installation) •
+[Quick Start](#-quick-start) •
+[Documentation](#-documentation) •
+[Examples](#-examples) •
+[React 19 Support](#-react-19-features)
+
+</div>
+
+---
 
 ## 🌟 Features
 
-- **🔄 OpenAPI/Swagger Support**: Convert YAML specs into TypeScript/JavaScript code
-- **🎣 React Hooks**: Method-specific hooks (`useGet`, `usePost`, `usePut`, `usePatch`, `useDelete`)
-- **💾 Smart Caching**: Built-in response caching with TTL support
-- **🔁 Polling**: Auto-refresh data at regular intervals
-- **🛑 Request Cancellation**: Abort in-flight requests
-- **📘 Full TypeScript Support**: Auto-generated types from OpenAPI schemas
-- **🚀 Zero Configuration**: Works out of the box
-- **🎯 Type-Safe**: End-to-end type safety from API to UI
-- **⚡ Lightweight**: Minimal dependencies, tree-shakeable
-- **✨ React 19 Ready**: Full support for React 17, 18, and 19 with new hooks
-  - **Optimistic Updates** with `useOptimistic` (React 19+)
-  - **Form Actions** with `useActionState` (React 19+)
-  - **Backward Compatible**: Graceful fallback for React 17/18
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### 🎯 Core Features
+- **🔄 OpenAPI/Swagger Support** - Convert YAML specs into TypeScript/JavaScript
+- **🎣 Method-Specific Hooks** - `useGet`, `usePost`, `usePut`, `usePatch`, `useDelete`
+- **💾 Smart Caching** - Built-in response caching with TTL support
+- **🔁 Auto-Polling** - Refresh data at regular intervals
+- **🛑 Request Cancellation** - Abort in-flight requests
+- **🚀 Zero Configuration** - Works out of the box
+
+</td>
+<td width="50%" valign="top">
+
+### ⚡ Advanced Features
+- **📘 Full TypeScript Support** - Auto-generated types from schemas
+- **🎯 Type-Safe** - End-to-end type safety from API to UI
+- **🪶 Lightweight** - Minimal dependencies, tree-shakeable
+- **✨ React 19 Ready** - Optimistic updates & form actions
+- **🔄 Backward Compatible** - Supports React 17, 18, and 19
+- **🎨 Developer Friendly** - Intuitive API and great DX
+
+</td>
+</tr>
+</table>
+
+---
 
 ## 📦 Installation
 
@@ -28,16 +62,22 @@ npm install react-api-weaver
 | Metric | Coverage | Status |
 |--------|----------|--------|
 | Statements | 85.27% | ✅ |
-| Branches | 83.46% | ⚠️ |
+| Branches | 83.06% | ⚠️ |
 | Functions | 90.16% | ✅ |
 | Lines | 85.27% | ✅ |
 
-*Last Updated: 2025-12-23*
+*Last Updated: 2025-12-26*
 
+**Requirements:**
+- React 17, 18, or 19
+- TypeScript 4.5+ (optional but recommended)
+- Node.js 16+
+
+---
 
 ## 🚀 Quick Start
 
-### 1. Create an OpenAPI YAML file
+### Step 1️⃣: Create an OpenAPI Specification
 
 Create a `api.yaml` file with your API specification:
 
@@ -70,18 +110,18 @@ paths:
                       type: string
 ```
 
-### 2. Generate API client code
+### Step 2️⃣: Generate Type-Safe API Client
 
 ```bash
 npx react-api-weaver generate -i api.yaml -o src/generated
 ```
 
-This generates TypeScript functions and types:
-- `src/generated/api.ts` - API functions
-- `src/generated/types.ts` - TypeScript types/interfaces for requests and responses
-- `src/generated/index.ts` - Exports for easy importing
+**Generated files:**
+- 📄 `src/generated/api.ts` - API functions
+- 📄 `src/generated/types.ts` - TypeScript types/interfaces
+- 📄 `src/generated/index.ts` - Barrel exports
 
-### 3. Use the generated hooks in your React components
+### Step 3️⃣: Use in Your React Components
 
 ```tsx
 import React from 'react';
@@ -93,7 +133,7 @@ function UserList() {
     () => getUsers(),
     {
       cache: true,
-      polling: 30000, // Refresh every 30 seconds
+      polling: 30000, // Auto-refresh every 30 seconds
     }
   );
 
@@ -102,8 +142,8 @@ function UserList() {
 
   return (
     <div>
-      <button onClick={refetch}>Refresh</button>
-      <button onClick={abort}>Cancel</button>
+      <button onClick={refetch}>🔄 Refresh</button>
+      <button onClick={abort}>❌ Cancel</button>
       {data?.map(user => (
         <div key={user.id}>{user.name}</div>
       ))}
@@ -112,21 +152,60 @@ function UserList() {
 }
 ```
 
-## 📖 CLI Usage
+---
+
+## 📊 Test Coverage
+
+<table>
+<tr>
+<th>Metric</th>
+<th>Coverage</th>
+<th>Status</th>
+</tr>
+<tr>
+<td>Statements</td>
+<td><code>85.27%</code></td>
+<td>✅ Excellent</td>
+</tr>
+<tr>
+<td>Branches</td>
+<td><code>83.46%</code></td>
+<td>⚠️ Good</td>
+</tr>
+<tr>
+<td>Functions</td>
+<td><code>90.16%</code></td>
+<td>✅ Excellent</td>
+</tr>
+<tr>
+<td>Lines</td>
+<td><code>85.27%</code></td>
+<td>✅ Excellent</td>
+</tr>
+</table>
+
+*Last Updated: December 23, 2025*
+
+---
+
+## 📖 CLI Documentation
 
 ### Generate Command
 
-Generate API client code from OpenAPI YAML:
+Generate API client code from OpenAPI specifications:
 
 ```bash
 react-api-weaver generate -i <input.yaml> -o <output-dir> [options]
 ```
 
 **Options:**
-- `-i, --input <path>`: Path to OpenAPI YAML file (required)
-- `-o, --output <path>`: Output directory for generated code (required)
-- `-f, --format <format>`: Output format: `ts`, `js`, or `both` (default: `ts`)
-- `-b, --base-url <url>`: Base URL for API requests
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-i, --input <path>` | Path to OpenAPI YAML file | Required |
+| `-o, --output <path>` | Output directory for generated code | Required |
+| `-f, --format <format>` | Output format: `ts`, `js`, or `both` | `ts` |
+| `-b, --base-url <url>` | Base URL for API requests | From YAML |
 
 **Example:**
 
@@ -148,13 +227,52 @@ react-api-weaver watch -i <input.yaml> -o <output-dir> [options]
 react-api-weaver watch -i api.yaml -o src/generated
 ```
 
-## 🎣 Hooks API
+---
 
-### Standard Hooks
+## 🎣 Hooks API Reference
 
-#### useGet
+### Standard HTTP Method Hooks
 
-Hook for GET requests with caching support.
+<table>
+<tr>
+<th>Hook</th>
+<th>HTTP Method</th>
+<th>Default Cache</th>
+<th>Use Case</th>
+</tr>
+<tr>
+<td><code>useGet</code></td>
+<td>GET</td>
+<td>✅ Enabled</td>
+<td>Fetch data</td>
+</tr>
+<tr>
+<td><code>usePost</code></td>
+<td>POST</td>
+<td>❌ Disabled</td>
+<td>Create resources</td>
+</tr>
+<tr>
+<td><code>usePut</code></td>
+<td>PUT</td>
+<td>❌ Disabled</td>
+<td>Replace resources</td>
+</tr>
+<tr>
+<td><code>usePatch</code></td>
+<td>PATCH</td>
+<td>❌ Disabled</td>
+<td>Update resources</td>
+</tr>
+<tr>
+<td><code>useDelete</code></td>
+<td>DELETE</td>
+<td>❌ Disabled</td>
+<td>Remove resources</td>
+</tr>
+</table>
+
+#### Basic Usage
 
 ```tsx
 const { data, loading, error, refetch, abort } = useGet(
@@ -163,58 +281,20 @@ const { data, loading, error, refetch, abort } = useGet(
 );
 ```
 
-#### usePost
+### React 19+ Enhanced Hooks
 
-Hook for POST requests (cache disabled by default).
+#### Optimistic Update Hooks
 
-```tsx
-const { data, loading, error, refetch, abort } = usePost(
-  apiFunction,
-  options
-);
-```
+Perfect for instant UI feedback with automatic rollback on errors:
 
-#### usePut
-
-Hook for PUT requests (cache disabled by default).
+- `useApiOptimistic` - Generic optimistic mutations
+- `usePostOptimistic` - POST with optimistic updates
+- `usePutOptimistic` - PUT with optimistic updates
+- `usePatchOptimistic` - PATCH with optimistic updates
+- `useDeleteOptimistic` - DELETE with optimistic updates
 
 ```tsx
-const { data, loading, error, refetch, abort } = usePut(
-  apiFunction,
-  options
-);
-```
-
-#### usePatch
-
-Hook for PATCH requests (cache disabled by default).
-
-```tsx
-const { data, loading, error, refetch, abort } = usePatch(
-  apiFunction,
-  options
-);
-```
-
-#### useDelete
-
-Hook for DELETE requests (cache disabled by default).
-
-```tsx
-const { data, loading, error, refetch, abort } = useDelete(
-  apiFunction,
-  options
-);
-```
-
-### React 19+ Hooks (with React 17/18 Fallback)
-
-#### useApiOptimistic
-
-Hook for mutations with optimistic updates using React 19's `useOptimistic`.
-
-```tsx
-const { data, optimisticData, loading, error, mutate, abort } = useApiOptimistic(
+const { data, optimisticData, loading, error, mutate, abort } = usePostOptimistic(
   apiFunction,
   {
     optimisticUpdate: (currentData, input) => {
@@ -226,15 +306,9 @@ const { data, optimisticData, loading, error, mutate, abort } = useApiOptimistic
 );
 ```
 
-**Specialized Optimistic Hooks:**
-- `usePostOptimistic` - POST with optimistic updates
-- `usePutOptimistic` - PUT with optimistic updates
-- `usePatchOptimistic` - PATCH with optimistic updates
-- `useDeleteOptimistic` - DELETE with optimistic updates
+#### Form Action Hook
 
-#### useApiAction
-
-Hook for form-based API interactions using React 19's `useActionState`.
+Seamlessly integrate with native forms using React 19's `useActionState`:
 
 ```tsx
 const { data, error, isPending, action, formAction } = useApiAction(
@@ -254,64 +328,81 @@ const { data, error, isPending, action, formAction } = useApiAction(
 await action({ title: 'New Todo' });
 ```
 
-## ⚙️ Hook Options
+---
 
-All hooks accept an options object:
+## ⚙️ Configuration Options
+
+### Hook Options
+
+All hooks accept a comprehensive options object:
 
 ```typescript
 interface UseApiOptions<TData> {
-  // Enable/disable caching (default: true for GET, false for others)
+  // Caching configuration
   cache?: boolean | {
-    ttl?: number;  // Time to live in milliseconds
-    key?: string;  // Custom cache key
+    ttl?: number;       // Time to live in milliseconds
+    key?: string;       // Custom cache key
   };
 
   // Polling interval in milliseconds
   polling?: number;
 
-  // Whether the request should be executed (default: true)
+  // Conditional execution (default: true)
   enabled?: boolean;
 
-  // Success callback
+  // Lifecycle callbacks
   onSuccess?: (data: TData) => void;
-
-  // Error callback
   onError?: (error: Error) => void;
 
-  // Number of retries or boolean (default: 0)
-  retry?: number | boolean;
-
-  // Delay between retries in milliseconds (default: 1000)
-  retryDelay?: number;
+  // Retry configuration
+  retry?: number | boolean;    // Number of retries or boolean (default: 0)
+  retryDelay?: number;         // Delay between retries in ms (default: 1000)
 }
 ```
 
-## 🎯 Return Values
+### Request Configuration
 
-All hooks return an object with:
+Customize individual API requests:
+
+```typescript
+interface RequestConfig {
+  headers?: Record<string, string>;
+  baseURL?: string;
+  timeout?: number;
+  signal?: AbortSignal;
+}
+```
+
+**Example:**
+
+```tsx
+const { data } = useGet(
+  () => getUsers({}, {
+    headers: { 'Authorization': 'Bearer token' },
+    timeout: 5000,
+  })
+);
+```
+
+### Return Values
+
+All hooks return a consistent interface:
 
 ```typescript
 interface UseApiResult<TData> {
-  // Response data
-  data: TData | null;
-
-  // Loading state
-  loading: boolean;
-
-  // Error object
-  error: Error | null;
-
-  // Manual refetch function
-  refetch: () => Promise<void>;
-
-  // Abort current request
-  abort: () => void;
+  data: TData | null;           // Response data
+  loading: boolean;             // Loading state
+  error: Error | null;          // Error object
+  refetch: () => Promise<void>; // Manual refetch
+  abort: () => void;            // Cancel request
 }
 ```
 
+---
+
 ## 💡 Examples
 
-### Example 1: Basic GET with Caching
+### Example 1: Basic GET with Smart Caching
 
 ```tsx
 import { useGet } from 'react-api-weaver';
@@ -338,6 +429,7 @@ function TodoList() {
 ```tsx
 import { usePost } from 'react-api-weaver';
 import { createTodo } from './generated/api';
+import { useState } from 'react';
 
 function CreateTodo() {
   const [title, setTitle] = useState('');
@@ -347,13 +439,13 @@ function CreateTodo() {
     {
       enabled: false,
       onSuccess: (data) => {
-        console.log('Todo created:', data);
+        console.log('✅ Todo created:', data);
         setTitle('');
       },
     }
   );
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     refetch();
   };
@@ -363,26 +455,29 @@ function CreateTodo() {
       <input
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        placeholder="Enter todo title..."
       />
-      <button disabled={loading}>Create</button>
+      <button disabled={loading}>
+        {loading ? 'Creating...' : 'Create'}
+      </button>
     </form>
   );
 }
 ```
 
-### Example 3: Polling
+### Example 3: Auto-Polling for Real-Time Updates
 
 ```tsx
 import { useGet } from 'react-api-weaver';
 import { getTodoById } from './generated/api';
 
-function LiveTodo({ id }) {
+function LiveTodo({ id }: { id: number }) {
   const { data } = useGet(
     () => getTodoById({ id }),
     { polling: 5000 } // Poll every 5 seconds
   );
 
-  return <div>{data?.title}</div>;
+  return <div>📝 {data?.title}</div>;
 }
 ```
 
@@ -397,8 +492,10 @@ function UserList() {
 
   return (
     <div>
-      {loading && <button onClick={abort}>Cancel</button>}
-      {data && <div>{data.length} users loaded</div>}
+      {loading && (
+        <button onClick={abort}>❌ Cancel Request</button>
+      )}
+      {data && <div>✅ {data.length} users loaded</div>}
     </div>
   );
 }
@@ -410,13 +507,13 @@ function UserList() {
 import { useGet } from 'react-api-weaver';
 import { getUserById } from './generated/api';
 
-function UserProfile({ userId }) {
+function UserProfile({ userId }: { userId?: number }) {
   const { data } = useGet(
-    () => getUserById({ id: userId }),
+    () => getUserById({ id: userId! }),
     { enabled: !!userId } // Only fetch when userId is available
   );
 
-  return <div>{data?.name}</div>;
+  return <div>{data?.name ?? 'No user selected'}</div>;
 }
 ```
 
@@ -425,6 +522,7 @@ function UserProfile({ userId }) {
 ```tsx
 import { usePostOptimistic } from 'react-api-weaver';
 import { createTodo } from './generated/api';
+import { useState } from 'react';
 
 function OptimisticTodo() {
   const [todos, setTodos] = useState([]);
@@ -449,7 +547,7 @@ function OptimisticTodo() {
   return (
     <div>
       <button onClick={handleCreate} disabled={loading}>
-        Add Todo
+        ➕ Add Todo
       </button>
       {optimisticData && (
         <div style={{ opacity: loading ? 0.5 : 1 }}>
@@ -457,7 +555,7 @@ function OptimisticTodo() {
         </div>
       )}
       {todos.map(todo => (
-        <div key={todo.id}>{todo.title}</div>
+        <div key={todo.id}>✅ {todo.title}</div>
       ))}
     </div>
   );
@@ -472,7 +570,7 @@ import { createTodo } from './generated/api';
 
 function TodoForm() {
   const { data, error, isPending, formAction } = useApiAction(
-    (input) => createTodo({
+    (input: any) => createTodo({
       userId: 1,
       title: input.title,
       completed: input.completed === 'true',
@@ -487,91 +585,55 @@ function TodoForm() {
         <option value="true">Done</option>
       </select>
       <button type="submit" disabled={isPending}>
-        {isPending ? 'Creating...' : 'Create Todo'}
+        {isPending ? '⏳ Creating...' : '✨ Create Todo'}
       </button>
-      {error && <div>Error: {error.message}</div>}
-      {data && <div>Created: {data.title}</div>}
+      {error && <div style={{ color: 'red' }}>❌ {error.message}</div>}
+      {data && <div style={{ color: 'green' }}>✅ Created: {data.title}</div>}
     </form>
   );
 }
 ```
 
-## 🔧 Configuration
+---
 
-### Custom Request Configuration
+## 📘 TypeScript Support
 
-The generated API functions accept a `RequestConfig` parameter:
+### Type Exports
 
-```typescript
-interface RequestConfig {
-  headers?: Record<string, string>;
-  baseURL?: string;
-  timeout?: number;
-  signal?: AbortSignal;
-}
-```
-
-**Example:**
-
-```tsx
-const { data } = useGet(
-  () => getUsers({}, {
-    headers: { 'Authorization': 'Bearer token' },
-    timeout: 5000,
-  })
-);
-```
-
-### Setting Default Base URL
-
-You can set a base URL in three ways:
-
-1. **In the OpenAPI YAML** (servers section)
-2. **Via CLI**: `react-api-weaver generate -i api.yaml -o src/generated -b https://api.example.com`
-3. **At runtime**: Pass `baseURL` in the request config
-
-## 📁 Project Structure
-
-```
-your-project/
-├── src/
-│   ├── generated/          # Generated API code
-│   │   ├── api.ts          # Generated API functions
-│   │   ├── types.ts        # TypeScript types/interfaces
-│   │   └── index.ts        # Exports (functions + types)
-│   └── components/
-│       └── UserList.tsx    # Your components using hooks
-├── api.yaml                # OpenAPI specification
-└── package.json
-```
-
-## 📘 Type Exports
-
-All TypeScript types are exported from the generated `types.ts` file. You can import types separately from functions:
+All TypeScript types are automatically generated and exported:
 
 ```tsx
 // Import functions
 import { getUsers, createUser } from './generated/api';
 
 // Import types separately
-import type { GetUsersResponse, CreateUserBody, CreateUserResponse } from './generated/types';
+import type { 
+  GetUsersResponse, 
+  CreateUserBody, 
+  CreateUserResponse 
+} from './generated/types';
 
 // Or import everything from index
 import { getUsers, type GetUsersResponse } from './generated';
 ```
 
-**Available Types:**
-- `{OperationName}Params` - Request parameters (for GET, DELETE, etc.)
-- `{OperationName}Body` - Request body (for POST, PUT, PATCH)
-- `{OperationName}Response` - Response data type
+### Type Naming Convention
 
-**Example:**
+| Type | Pattern | Example |
+|------|---------|---------|
+| Request Parameters | `{OperationName}Params` | `GetUserByIdParams` |
+| Request Body | `{OperationName}Body` | `CreateUserBody` |
+| Response Data | `{OperationName}Response` | `GetUsersResponse` |
+
+### Type-Safe Example
+
 ```tsx
 import { getTodoById } from './generated/api';
 import type { GetTodoByIdParams, GetTodoByIdResponse } from './generated/types';
 
 function TodoComponent({ todoId }: { todoId: number }) {
   const params: GetTodoByIdParams = { id: todoId };
+  
   const { data } = useGet<GetTodoByIdResponse>(
     () => getTodoById(params)
   );
@@ -580,9 +642,13 @@ function TodoComponent({ todoId }: { todoId: number }) {
 }
 ```
 
+---
+
 ## 🛠️ Development Workflow
 
 ### Option 1: Manual Generation
+
+Add a script to your `package.json`:
 
 ```json
 {
@@ -596,6 +662,8 @@ Run `npm run generate` when you update your API spec.
 
 ### Option 2: Pre-development Generation
 
+Automatically generate before starting dev server:
+
 ```json
 {
   "scripts": {
@@ -605,61 +673,29 @@ Run `npm run generate` when you update your API spec.
 }
 ```
 
-Automatically generates code before starting the dev server.
+### Option 3: Watch Mode (Recommended)
 
-### Option 3: Watch Mode (Separate Terminal)
+Run in a separate terminal for automatic regeneration:
 
 ```bash
 react-api-weaver watch -i api.yaml -o src/generated
 ```
 
-Automatically regenerates code when the YAML file changes.
-
-## 🧪 Testing with npm link
-
-For local development and testing:
-
-```bash
-# In react-api-weaver directory
-npm run build
-npm link
-
-# In your project directory
-npm link react-api-weaver
-```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📄 License
-
-MIT
-
-## 🙏 Acknowledgments
-
-- Built with [TypeScript](https://www.typescriptlang.org/)
-- Powered by [React](https://reactjs.org/)
-- OpenAPI parsing by [Swagger Parser](https://github.com/APIDevTools/swagger-parser)
-- Bundled with [tsdown](https://tsdown.dev)
-
-## ☕ Support
-
-If you find this project helpful, consider supporting me by buying me a coffee!
-
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/ajay28kumar)
-
 ---
 
 ## 🎉 React 19 Features
 
-React API Weaver now fully supports React 19 while maintaining backward compatibility with React 17 and 18.
+React API Weaver fully supports React 19 while maintaining **100% backward compatibility** with React 17 and 18.
 
 ### What's New in React 19 Support
 
-#### 1. Optimistic Updates
+<table>
+<tr>
+<td width="50%">
 
-Use `useOptimistic` (React 19) for instant UI feedback before server responses:
+#### ⚡ Optimistic Updates
+
+Instant UI feedback using React 19's `useOptimistic`:
 
 ```tsx
 import { usePostOptimistic } from 'react-api-weaver';
@@ -680,9 +716,12 @@ const { optimisticData, mutate } = usePostOptimistic(
 - 🔄 Automatic rollback on errors
 - 🎯 Type-safe optimistic state
 
-#### 2. Form Actions
+</td>
+<td width="50%">
 
-Use `useActionState` (React 19) for progressive enhancement:
+#### 📝 Form Actions
+
+Progressive enhancement with `useActionState`:
 
 ```tsx
 import { useApiAction } from 'react-api-weaver';
@@ -691,139 +730,235 @@ const { formAction, isPending } = useApiAction(createTodo);
 
 <form action={formAction}>
   <input name="title" />
-  <button type="submit" disabled={isPending}>Submit</button>
+  <button disabled={isPending}>Submit</button>
 </form>
 ```
 
 **Benefits:**
-- 📝 Works with native form elements
+- 📝 Works with native forms
 - 🚀 Progressive enhancement
 - 🎯 Built-in pending states
 
-#### 3. Version Detection
+</td>
+</tr>
+</table>
 
-Check React version at runtime:
+### Backward Compatibility Matrix
+
+| Feature | React 19 | React 17/18 Fallback |
+|---------|----------|----------------------|
+| `useApiOptimistic` | Native `useOptimistic` | Manual state management |
+| `useApiAction` | Native `useActionState` | `useTransition` + state |
+| Optimistic hooks | Native rollback | Manual error handling |
+| All standard hooks | ✅ Supported | ✅ Supported |
+
+### Version Detection Utilities
 
 ```tsx
 import { isReact19OrLater, getReactMajorVersion } from 'react-api-weaver';
 
 if (isReact19OrLater()) {
-  console.log('React 19 features available!');
+  console.log('🎉 React 19 features available!');
 }
-```
 
-### Backward Compatibility
-
-All React 19 features gracefully degrade on React 17/18:
-
-| Feature | React 19 | React 17/18 Fallback |
-|---------|----------|----------------------|
-| `useApiOptimistic` | Uses native `useOptimistic` | Manual state management |
-| `useApiAction` | Uses native `useActionState` | `useTransition` + state |
-| Optimistic hooks | Native rollback | Manual error handling |
-
-### Migration Guide
-
-#### From React 18 to React 19
-
-**Step 1: Update Dependencies**
-
-```bash
-npm install react@19 react-dom@19
-npm install react-api-weaver@latest
-```
-
-**Step 2: Use New Hooks (Optional)**
-
-Replace standard mutation hooks with optimistic variants:
-
-```tsx
-// Before (React 18)
-const { data, loading, refetch } = usePost(createTodo, {
-  enabled: false,
-  onSuccess: (data) => {
-    setItems(prev => [...prev, data]);
-  }
-});
-
-// After (React 19)
-const { optimisticData, loading, mutate } = usePostOptimistic(createTodo, {
-  optimisticUpdate: (current, input) => ({
-    id: Date.now(),
-    ...input,
-  }),
-  onSuccess: (data) => {
-    setItems(prev => [...prev, data]);
-  }
-});
-```
-
-**Step 3: Adopt Form Actions (Optional)**
-
-```tsx
-// Before (React 18)
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  const formData = new FormData(e.target);
-  await createTodo(Object.fromEntries(formData));
-};
-
-// After (React 19)
-const { formAction } = useApiAction(createTodo);
-
-<form action={formAction}>
-  {/* form fields */}
-</form>
+console.log(`React version: ${getReactMajorVersion()}`);
 ```
 
 ### Best Practices
 
-#### When to Use Optimistic Updates
+#### ✅ When to Use Optimistic Updates
 
-✅ **Good use cases:**
 - Creating new items in a list
-- Toggling boolean states (like/unlike)
-- Updating text fields
-- Deleting items with visual feedback
+- Toggling boolean states (like/unlike, follow/unfollow)
+- Updating text fields or simple data
+- Deleting items with immediate visual feedback
 
-❌ **Avoid for:**
-- Complex server-side validation
-- Operations with side effects
+#### ❌ When to Avoid Optimistic Updates
+
+- Complex server-side validation scenarios
+- Operations with unpredictable side effects
 - Critical financial transactions
-- When server response differs significantly from input
+- Cases where server response differs significantly from input
 
-#### When to Use Form Actions
+#### ✅ When to Use Form Actions
 
-✅ **Good use cases:**
 - Traditional form submissions
-- Server-side validation
-- Progressive enhancement
+- Server-side validation workflows
+- Progressive enhancement requirements
 - Multi-step forms
 
-❌ **Avoid for:**
-- Real-time validation
-- Complex client-side logic
-- Non-form interactions
+---
 
-## 📝 Next Steps (Optional Enhancements)
+## 🔧 Advanced Configuration
 
-### Potential Future Features
-- [x] Optimistic updates (React 19)
-- [x] Form actions (React 19)
-- [x] Automated testing (Jest + React Testing Library)
+### Setting Base URL
+
+Configure your API base URL in three ways:
+
+**1. In OpenAPI YAML (servers section):**
+
+```yaml
+servers:
+  - url: https://api.example.com
+```
+
+**2. Via CLI:**
+
+```bash
+react-api-weaver generate -i api.yaml -o src/generated -b https://api.example.com
+```
+
+**3. At Runtime:**
+
+```tsx
+const { data } = useGet(
+  () => getUsers({}, { baseURL: 'https://api.example.com' })
+);
+```
+
+### Custom Headers & Authentication
+
+```tsx
+const { data } = useGet(
+  () => getUsers({}, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'X-Custom-Header': 'value',
+    },
+  })
+);
+```
+
+### Retry Configuration
+
+```tsx
+const { data } = useGet(
+  () => getUsers(),
+  {
+    retry: 3,           // Retry 3 times on failure
+    retryDelay: 2000,   // Wait 2 seconds between retries
+  }
+);
+```
+
+---
+
+## 📁 Project Structure
+
+```
+your-project/
+├── src/
+│   ├── generated/              # ✨ Generated API code
+│   │   ├── api.ts              #    API functions
+│   │   ├── types.ts            #    TypeScript types
+│   │   └── index.ts            #    Barrel exports
+│   ├── components/
+│   │   └── UserList.tsx        # Your components
+│   └── App.tsx
+├── api.yaml                    # 📋 OpenAPI specification
+├── package.json
+└── tsconfig.json
+```
+
+---
+
+## 🧪 Testing with npm link
+
+For local development and testing:
+
+```bash
+# In react-api-weaver directory
+npm run build
+npm link
+
+# In your project directory
+npm link react-api-weaver
+```
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. 🍴 Fork the repository
+2. 🌿 Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. 💾 Commit your changes (`git commit -m 'Add amazing feature'`)
+4. 📤 Push to the branch (`git push origin feature/amazing-feature`)
+5. 🎉 Open a Pull Request
+
+### Development Setup
+
+```bash
+git clone https://github.com/react-forge/react-api-weaver.git
+cd react-api-weaver
+npm install
+npm run build
+npm test
+```
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🔮 Roadmap
+
+### Implemented ✅
+- [x] Full TypeScript support with auto-generated types
+- [x] Method-specific React hooks
+- [x] Smart caching with TTL
+- [x] Request polling and cancellation
+- [x] React 19 optimistic updates
+- [x] React 19 form actions
+- [x] Comprehensive test suite (85%+ coverage)
+
+### Coming Soon 🚀
 - [ ] React Query integration
-- [ ] Middleware support (interceptors)
+- [ ] Request/response middleware (interceptors)
 - [ ] WebSocket support
 - [ ] GraphQL support
 - [ ] Zod schema validation
-- [ ] Devtools integration
+- [ ] DevTools integration
+- [ ] Interactive documentation playground
 
-### Documentation Improvements
-- [ ] Video tutorial
-- [ ] Interactive playground
-- [ ] More examples (auth, pagination, etc.)
-- [ ] API reference site
+---
 
+## 🙏 Acknowledgments
 
-Made with ❤️ by the React API Weaver team
+Built with amazing open-source technologies:
 
+- ⚛️ [React](https://reactjs.org/) - A JavaScript library for building user interfaces
+- 📘 [TypeScript](https://www.typescriptlang.org/) - JavaScript with syntax for types
+- 📋 [Swagger Parser](https://github.com/APIDevTools/swagger-parser) - OpenAPI parsing and validation
+- 📦 [tsdown](https://tsdown.dev) - Modern TypeScript bundler
+
+---
+
+## ☕ Support
+
+If you find this project helpful, consider supporting the development:
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/ajay28kumar)
+
+---
+
+## 📚 Documentation & Resources
+
+- 📖 [API Reference](https://github.com/react-forge/react-api-weaver)
+- 🎓 [Examples Repository](https://github.com/react-forge/react-api-weaver/tree/main/example)
+- 🐛 [Issue Tracker](https://github.com/react-forge/react-api-weaver/issues)
+- 💬 [Discussions](https://github.com/react-forge/react-api-weaver/discussions)
+
+---
+
+<div align="center">
+
+**Made with ❤️ by react-forge**
+
+⭐ Star us on [GitHub](https://github.com/react-forge/react-api-weaver) if you find this useful!
+
+</div>
