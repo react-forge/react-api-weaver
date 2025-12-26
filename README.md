@@ -68,12 +68,6 @@ npm install react-api-weaver
 
 *Last Updated: 2025-12-26*
 
-**Requirements:**
-- React 17, 18, or 19
-- TypeScript 4.5+ (optional but recommended)
-- Node.js 16+
-
----
 
 ## 🚀 Quick Start
 
